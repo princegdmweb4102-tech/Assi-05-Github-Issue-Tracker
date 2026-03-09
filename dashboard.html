@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GitHub Issues Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+
+<header class="flex flex-col sm:flex-row justify-between items-center px-6 py-4 bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+    <div class="flex items-center gap-3 mb-4 sm:mb-0">
+      <img src="./assets/github-logo.png" alt="GitHub Logo" class="h-8 w-auto">
+      <h2 class="text-xl font-bold text-gray-900">GitHub Issues Tracker</h2>
+    </div>
+
+    <div class="flex w-full sm:w-auto flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <div class="relative w-full sm:w-72">
+           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+           </span>
+           <input type="text" id="searchInput" placeholder="Search issues..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent text-sm">
+        </div>
+        <button class="bg-[#4f46e5] hover:bg-[#4338ca] text-white font-medium px-5 py-2 rounded-md shrink-0 transition duration-200 shadow-sm hidden sm:block">+ New Issue</button>
+    </div>
+</header>
+
+<main class="container mx-auto px-4 py-8 w-full max-w-7xl">
+    
+    <!-- Tabs -->
+    <div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2" style="scrollbar-width: thin;">
+        <button id="tab-All" onclick="filterIssues('All')" class="tab-btn px-6 py-2 rounded-md font-medium bg-[#4f46e5] text-white whitespace-nowrap transition-colors">All</button>
+        <button id="tab-Open" onclick="filterIssues('Open')" class="tab-btn px-6 py-2 rounded-md font-medium bg-transparent text-gray-600 hover:bg-gray-100 whitespace-nowrap transition-colors">Open</button>
+        <button id="tab-Closed" onclick="filterIssues('Closed')" class="tab-btn px-6 py-2 rounded-md font-medium bg-transparent text-gray-600 hover:bg-gray-100 whitespace-nowrap transition-colors">Closed</button>
+    </div>
+
+    <!-- Stats line -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 text-sm text-gray-600 gap-4">
+        <h3 id="issueCount" class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <img src="./assets/Aperture.png" class="w-5 h-5" alt="Issues"> Loading Issues...
+        </h3>
+        <div class="flex items-center gap-5">
+            <span class="flex items-center gap-2"><img src="./assets/Open-Status.png" class="w-4 h-4" alt="Open"> <span class="font-medium text-gray-700">Open</span></span>
+            <span class="flex items-center gap-2"><img src="./assets/Closed- Status .png" class="w-4 h-4" alt="Closed"> <span class="font-medium text-gray-700">Closed</span></span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingSpinner" class="flex flex-col items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#4f46e5] mb-4"></div>
+        <p class="text-gray-500 font-medium">Loading issues...</p>
+    </div>
+
+    <div id="noDataMessage" class="hidden flex-col items-center justify-center py-20 text-gray-500">
+        <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <p class="text-lg font-medium">No issues found.</p>
+    </div>
+
+    <!-- Issues Grid -->
+    <div id="issuesContainer" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Cards injected via JS -->
+    </div>
+    
+</main>
+
+<!-- Modal Overlay -->
+<div id="issueModal" class="fixed inset-0 bg-gray-900/60 hidden z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 flex flex-col p-8 sm:p-10 relative" id="modalContent">
+        
+        <h2 id="modalTitle" class="text-3xl font-bold text-[#1f2937] mb-4 pr-8">Fix broken image uploads</h2>
+        
+        <div class="flex flex-wrap items-center gap-3 mb-6 text-sm text-gray-500">
+            <span id="modalStatus" class="bg-[#10b981] text-white px-3 py-1 rounded-full font-medium">Opened</span>
+            <span>•</span>
+            <span class="text-gray-500">Opened by <span id="modalAuthor" class="font-medium text-gray-600">Fahim Ahmed</span></span>
+            <span>•</span>
+            <span id="modalDate" class="text-gray-500">22/02/2026</span>
+        </div>
+
+        <div class="flex flex-wrap gap-3 mb-8" id="modalBadges">
+            <!-- Badges -->
+        </div>
+
+        <div class="text-[#4b5563] text-lg mb-8 leading-relaxed" id="modalDescription">
+            Issue Description
+        </div>
+
+        <div class="bg-[#f8fafc] rounded-xl p-6 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-6 mb-10 w-full">
+            <div class="w-full sm:w-1/2">
+                <span class="block text-gray-500 text-lg mb-1">Assignee:</span>
+                <span id="modalAssignee" class="text-[#1f2937] font-bold text-xl">Fahim Ahmed</span>
+            </div>
+            <div class="w-full sm:w-1/2">
+                <span class="block text-gray-500 text-lg mb-2">Priority:</span>
+                <span id="modalPriority" class="text-white px-4 py-1.5 rounded-full text-sm font-bold w-max block">HIGH</span>
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-auto">
+            <button onclick="closeModal()" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white font-semibold text-lg px-8 py-3 rounded-md transition-colors shadow-sm">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
