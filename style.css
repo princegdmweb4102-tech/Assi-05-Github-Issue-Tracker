@@ -1,0 +1,94 @@
+body {
+  font-family: Arial;
+  background: #f4f4f4;
+  margin: 0;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  background: #6d28d9;
+  color: rgb(5, 5, 5);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.priority {
+  padding: 3px 8px;
+  color: white;
+  font-size: 12px;
+}
+
+.HIGH {
+  background: red;
+}
+.MEDIUM {
+  background: orange;
+}
+.LOW {
+  background: purple;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  width: 300px;
+}
