@@ -167,3 +167,46 @@ function renderLabels(labelsStr) {
     return `<span class="text-gray-600 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1 uppercase tracking-wide">${l}</span>`;
   }).join("");
 }
+
+window.filterIssues = filterIssues;
+
+window.openModal = function (id) {
+  const item = allIssues.find((i) => String(i.id) === String(id));
+  if (!item) return;
+
+  const modal = document.getElementById("issueModal");
+  const content = document.getElementById("modalContent");
+  const isClosed = item.status?.toLowerCase() === "closed";
+
+  document.getElementById("modalTitle").textContent = item.title || "No Title";
+  document.getElementById("modalDescription").innerText = item.description || "No description.";
+  document.getElementById("modalAuthor").textContent = item.author || "Unknown";
+  document.getElementById("modalAssignee").textContent = item.assignee || item.author || "Unassigned";
+  document.getElementById("modalDate").textContent = new Date(item.createdAt || Date.now()).toLocaleDateString("en-GB");
+
+  const statusEl = document.getElementById("modalStatus");
+  const statusIcon = isClosed ? "./assets/Closed- Status .png" : "./assets/Open-Status.png";
+  const statusText = isClosed ? "Closed" : "Opened";
+
+  statusEl.innerHTML = `<img src="${statusIcon}" class="w-3.5 h-3.5 inline-block -mt-0.5" alt="${statusText}"> ${statusText}`;
+  statusEl.className = isClosed
+    ? "bg-[#4f46e5] text-white px-3 py-1 rounded-full font-medium"
+    : "bg-[#10b981] text-white px-3 py-1 rounded-full font-medium";
+
+  const prio = (item.priority || "Medium").toUpperCase();
+  const prioBg = { HIGH: "bg-[#ef4444]", MEDIUM: "bg-[#f59e0b]", LOW: "bg-[#10b981]" }[prio] || "bg-gray-500";
+
+  const priorityEl = document.getElementById("modalPriority");
+  priorityEl.textContent = prio;
+  priorityEl.className = `${prioBg} text-white px-4 py-1.5 rounded-full text-sm font-bold w-max block`;
+
+  document.getElementById("modalBadges").innerHTML = renderModalLabels(item.label || item.labels);
+
+  modal.classList.remove("hidden");
+  void modal.offsetWidth;
+  modal.classList.remove("opacity-0");
+  modal.classList.add("opacity-100");
+  content.classList.remove("scale-95");
+  content.classList.add("scale-100");
+  document.body.style.overflow = "hidden";
+};
