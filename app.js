@@ -210,3 +210,42 @@ window.openModal = function (id) {
   content.classList.add("scale-100");
   document.body.style.overflow = "hidden";
 };
+
+
+function renderModalLabels(labelsStr) {
+  const labels = Array.isArray(labelsStr)
+    ? labelsStr
+    : typeof labelsStr === "string"
+    ? labelsStr.split(",")
+    : ["bug"];
+
+  return labels.map((l) => {
+    const label = l.toLowerCase();
+    if (label === "bug") {
+      return `<span class="text-[#ef4444] bg-[#fef2f2] border border-[#fecaca] px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 uppercase tracking-wide">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        ${l}</span>`;
+    }
+    if (label.includes("help")) {
+      return `<span class="text-[#d97706] bg-[#fffbeb] border border-[#fde68a] px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 uppercase tracking-wide">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        ${l}</span>`;
+    }
+    return `<span class="text-gray-600 bg-gray-50 border border-gray-200 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 uppercase tracking-wide">${l}</span>`;
+  }).join("");
+}
+
+window.closeModal = function () {
+  const modal = document.getElementById("issueModal");
+  const content = document.getElementById("modalContent");
+
+  modal.classList.remove("opacity-100");
+  modal.classList.add("opacity-0");
+  content.classList.remove("scale-100");
+  content.classList.add("scale-95");
+
+  setTimeout(() => {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }, 300);
+};
