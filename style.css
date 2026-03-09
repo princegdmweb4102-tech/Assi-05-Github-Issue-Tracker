@@ -92,3 +92,76 @@ button {
   padding: 20px;
   width: 300px;
 }
+
+
+/* dash board */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 30px;
+background:white;
+border-bottom:1px solid #ddd;
+}
+
+.top-actions input{
+padding:8px;
+}
+
+.new-btn{
+background:#6d28d9;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:5px;
+}
+
+.container{
+width:80%;
+margin:auto;
+margin-top:30px;
+}
+
+.filters button{
+padding:8px 14px;
+border:1px solid #ddd;
+background:white;
+}
+
+.filters .active{
+background:#6d28d9;
+color:white;
+}
+
+.issues-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-top:20px;
+}
+
+.issue-card{
+background:white;
+padding:15px;
+border-radius:8px;
+box-shadow:0 0 5px rgba(0,0,0,0.1);
+}
+
+.tag{
+display:inline-block;
+padding:3px 8px;
+font-size:12px;
+border-radius:4px;
+color:white;
+}
+
+.high{background:red;}
+.medium{background:orange;}
+.low{background:purple;}
+
+.issue-footer{
+font-size:12px;
+margin-top:10px;
+color:gray;
+}
